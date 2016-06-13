@@ -1,9 +1,8 @@
-import merge from 'merge';
 
 function baseMessage() {
   return {
-    'protocol': 'tiip.0.9',
-    'timestamp': Date.now()/1000+''
+    protocol: 'tiip.0.9',
+    timestamp: Date.now()/1000+''
   };
 }
 
@@ -29,17 +28,17 @@ export function pack(
 }
 
 export function packObj(obj) {
-    const msg = merge(this.baseMessage(), obj);
-    return JSON.stringify(msg);
+  const msg = { ...this.baseMessage(), ...obj };
+  return JSON.stringify(msg);
 }
 
 export function unpack(textMsg) {
-    return JSON.parse(textMsg);
+  return JSON.parse(textMsg);
 }
 
 export function unpackVerify(textMsg) {
-    // TODO: Perform validation etc here
-    return unpack(textMsg);
+  // TODO: Perform validation etc here
+  return unpack(textMsg);
 }
 
 export default {
