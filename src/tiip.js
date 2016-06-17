@@ -1,3 +1,7 @@
+export const fields = [
+  'type', 'target', 'signal', 'arguments', 'payload',
+  'mid', 'tenant', 'source', 'sid', 'ok', 'subTarget',
+];
 
 function baseMessage() {
   return {
