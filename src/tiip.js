@@ -5,12 +5,12 @@ export const fields = [
 
 function baseMessage() {
   return {
-    protocol: 'tiip.0.9',
+    protocol: 'tiip.1.0',
     timestamp: String(Date.now() / 1000),
   };
 }
 
-function isDef(value) {
+export function isDef(value) {
   return typeof value !== undefined && value !== null;
 }
 
@@ -49,9 +49,31 @@ export function unpackVerify(textMsg) {
   return unpack(textMsg);
 }
 
+// IMMUTABLE VERSIONS /////////////////
+
+export const fieldsImm = Set(fields);
+
+export function packImm(obj) {
+  return JSON.stringify(
+    obj.merge(Map(this.baseMessage()))
+      .filter((value, key) => fieldsImm.includes(key))
+      .toJS()
+  );
+}
+
+export function unpackImm(textMsg) {
+  return Map(JSON.parse(textMsg));
+}
+
+// ////////////////////////////////////
+
 export default {
+  fields,
   pack,
   packObj,
   unpack,
   unpackVerify,
+  fieldsImm,
+  packImm,
+  unpackImm,
 };
