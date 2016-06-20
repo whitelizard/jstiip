@@ -1,6 +1,6 @@
 {
   "name": "jstiip",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Implementation of ptotocol TIIP",
   "main": "lib/tiip.js",
   "scripts": {
