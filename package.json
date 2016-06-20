@@ -4,7 +4,8 @@
   "description": "Implementation of ptotocol TIIP",
   "main": "lib/tiip.js",
   "scripts": {
-    "build": "babel src -d lib",
+    "clean": "rimraf ./lib",
+    "build": "npm run clean&&babel src -d lib",
     "lint": "eslint src",
     "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"

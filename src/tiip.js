@@ -1,3 +1,5 @@
+// import { Set, Map } from 'immutable';
+
 export const fields = [
   'type', 'target', 'signal', 'arguments', 'payload',
   'mid', 'tenant', 'source', 'sid', 'ok', 'subTarget',
@@ -51,19 +53,19 @@ export function unpackVerify(textMsg) {
 
 // IMMUTABLE VERSIONS /////////////////
 
-export const fieldsImm = Set(fields);
-
-export function packImm(obj) {
-  return JSON.stringify(
-    obj.merge(Map(this.baseMessage()))
-      .filter((value, key) => fieldsImm.includes(key))
-      .toJS()
-  );
-}
-
-export function unpackImm(textMsg) {
-  return Map(JSON.parse(textMsg));
-}
+// export const fieldsImm = Set(fields);
+//
+// export function packImm(obj) {
+//   return JSON.stringify(
+//     obj.merge(Map(this.baseMessage()))
+//       .filter((value, key) => fieldsImm.includes(key))
+//       .toJS()
+//   );
+// }
+//
+// export function unpackImm(textMsg) {
+//   return Map(JSON.parse(textMsg));
+// }
 
 // ////////////////////////////////////
 
@@ -73,7 +75,7 @@ export default {
   packObj,
   unpack,
   unpackVerify,
-  fieldsImm,
-  packImm,
-  unpackImm,
+  // fieldsImm,
+  // packImm,
+  // unpackImm,
 };
