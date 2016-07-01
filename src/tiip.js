@@ -38,7 +38,7 @@ export function pack(
 }
 
 export function packObj(obj) {
-  const msg = { ...this.baseMessage(), ...obj };
+  const msg = { ...baseMessage(), ...obj };
   return JSON.stringify(msg);
 }
 
