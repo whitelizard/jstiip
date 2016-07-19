@@ -1,8 +1,8 @@
 // import { Set, Map } from 'immutable';
 
 export const fields = [
-  'type', 'target', 'signal', 'arguments', 'payload',
-  'mid', 'tenant', 'source', 'sid', 'ok', 'subTarget',
+  'mid', 'sid', 'type', 'ok', 'tenant', 'source', 'target', 'subTarget', 'arguments',
+  'channel', 'signal', 'payload',
 ];
 
 function baseMessage() {
@@ -17,19 +17,20 @@ export function isDef(value) {
 }
 
 export function pack(
-  type, target, signal, arguments_, payload,
-  mid, tenant, source, sid, ok, subTarget
+  type, target, signal, args, payload,
+  mid, tenant, source, channel, sid, ok, subTarget
 ) {
   const msg = baseMessage();
 
   if (isDef(type)) msg.type = type;
   if (isDef(target)) msg.target = target;
   if (isDef(signal)) msg.signal = signal;
-  if (isDef(arguments_)) msg.arguments = arguments_;
+  if (isDef(args)) msg.arguments = args;
   if (isDef(payload)) msg.payload = payload;
   if (isDef(mid)) msg.mid = mid;
   if (isDef(tenant)) msg.tenant = tenant;
   if (isDef(source)) msg.source = source;
+  if (isDef(channel)) msg.channel = channel;
   if (isDef(sid)) msg.sid = sid;
   if (isDef(ok)) msg.ok = ok;
   if (isDef(subTarget)) msg.subTarget = subTarget;
