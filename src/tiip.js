@@ -12,7 +12,7 @@ function baseMessage() {
   };
 }
 
-export function isDef(value) {
+function isDef(value) {
   return typeof value !== undefined && value !== null;
 }
 
@@ -70,13 +70,4 @@ export function unpackVerify(textMsg) {
 
 // ////////////////////////////////////
 
-export default {
-  fields,
-  pack,
-  packObj,
-  unpack,
-  unpackVerify,
-  // fieldsImm,
-  // packImm,
-  // unpackImm,
-};
+export default pack;
