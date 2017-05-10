@@ -1,9 +1,4 @@
-// import { Set, Map } from 'immutable';
-
-export const fields = [
-  'mid', 'sid', 'type', 'ok', 'tenant', 'source', 'target', 'subTarget', 'arguments',
-  'channel', 'signal', 'payload',
-];
+export const fields = ['mid', 'sid', 'type', 'ok', 'ten', 'src', 'targ', 'arg', 'ch', 'sig', 'pl'];
 
 function baseMessage() {
   return {
@@ -13,27 +8,23 @@ function baseMessage() {
 }
 
 function isDef(value) {
-  return typeof value !== undefined && value !== null;
+  return typeof value !== 'undefined' && value !== null;
 }
 
-export function pack(
-  type, target, signal, args, payload,
-  mid, tenant, source, channel, sid, ok, subTarget
-) {
+export function pack(type, targ, sig, arg, pl, mid, ten, src, ch, sid, ok) {
   const msg = baseMessage();
 
   if (isDef(type)) msg.type = type;
-  if (isDef(target)) msg.target = target;
-  if (isDef(signal)) msg.signal = signal;
-  if (isDef(args)) msg.arguments = args;
-  if (isDef(payload)) msg.payload = payload;
+  if (isDef(targ)) msg.targ = targ;
+  if (isDef(sig)) msg.sig = sig;
+  if (isDef(arg)) msg.arg = arg;
+  if (isDef(pl)) msg.pl = pl;
   if (isDef(mid)) msg.mid = mid;
-  if (isDef(tenant)) msg.tenant = tenant;
-  if (isDef(source)) msg.source = source;
-  if (isDef(channel)) msg.channel = channel;
+  if (isDef(ten)) msg.ten = ten;
+  if (isDef(src)) msg.src = src;
+  if (isDef(ch)) msg.ch = ch;
   if (isDef(sid)) msg.sid = sid;
   if (isDef(ok)) msg.ok = ok;
-  if (isDef(subTarget)) msg.subTarget = subTarget;
 
   return JSON.stringify(msg);
 }
@@ -51,23 +42,3 @@ export function unpackVerify(textMsg) {
   // TODO: Perform validation etc here
   return unpack(textMsg);
 }
-
-// IMMUTABLE VERSIONS /////////////////
-
-// export const fieldsImm = Set(fields);
-//
-// export function packImm(obj) {
-//   return JSON.stringify(
-//     obj.merge(Map(this.baseMessage()))
-//       .filter((value, key) => fieldsImm.includes(key))
-//       .toJS()
-//   );
-// }
-//
-// export function unpackImm(textMsg) {
-//   return Map(JSON.parse(textMsg));
-// }
-
-// ////////////////////////////////////
-
-// export default pack;

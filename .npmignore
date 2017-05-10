@@ -1,3 +1,5 @@
 src/
-test/
-bin/
+node_modules/
+.eslintrc
+.babelrc
+.editorconfig
