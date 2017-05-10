@@ -2,8 +2,8 @@ export const fields = ['mid', 'sid', 'type', 'ok', 'ten', 'src', 'targ', 'arg', 
 
 function baseMessage() {
   return {
-    protocol: 'tiip.1.0',
-    timestamp: String(Date.now() / 1000),
+    pv: 'tiip.2.0',
+    ts: String(Date.now() / 1000),
   };
 }
 
