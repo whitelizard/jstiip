@@ -11,7 +11,7 @@ function isDef(value) {
   return typeof value !== 'undefined' && value !== null;
 }
 
-export function pack(type, targ, sig, arg, pl, mid, ten, src, ch, sid, ok) {
+export function pack({ type, targ, sig, arg, pl, mid, ten, src, ch, sid, ok }) {
   const msg = baseMessage();
 
   if (isDef(type)) msg.type = type;
