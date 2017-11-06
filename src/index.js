@@ -7,38 +7,54 @@ function baseMessage() {
   };
 }
 
-function isDef(value) {
-  return typeof value !== 'undefined' && value !== null;
-}
+// function isDef(value) {
+//   return typeof value !== 'undefined';
+// }
+//
+// export function pack({ type, targ, sig, arg, pl, mid, ten, src, ch, sid, ok }) {
+//   const msg = baseMessage();
+//
+//   if (isDef(type)) msg.type = type;
+//   if (isDef(targ)) msg.targ = targ;
+//   if (isDef(sig)) msg.sig = sig;
+//   if (isDef(arg)) msg.arg = arg;
+//   if (isDef(pl)) msg.pl = pl;
+//   if (isDef(mid)) msg.mid = mid;
+//   if (isDef(ten)) msg.ten = ten;
+//   if (isDef(src)) msg.src = src;
+//   if (isDef(ch)) msg.ch = ch;
+//   if (isDef(sid)) msg.sid = sid;
+//   if (isDef(ok)) msg.ok = ok;
+//
+//   return JSON.stringify(msg);
+// }
+//
+// export function packObj(obj) {
+//   const msg = { ...baseMessage(), ...obj };
+//   return JSON.stringify(msg);
+// }
+//
+// export function unpack(textMsg) {
+//   return JSON.parse(textMsg);
+// }
+//
+// export function unpackVerify(textMsg) {
+//   // TODO: Perform validation etc here
+//   return unpack(textMsg);
+// }
 
-export function pack({ type, targ, sig, arg, pl, mid, ten, src, ch, sid, ok }) {
-  const msg = baseMessage();
-
-  if (isDef(type)) msg.type = type;
-  if (isDef(targ)) msg.targ = targ;
-  if (isDef(sig)) msg.sig = sig;
-  if (isDef(arg)) msg.arg = arg;
-  if (isDef(pl)) msg.pl = pl;
-  if (isDef(mid)) msg.mid = mid;
-  if (isDef(ten)) msg.ten = ten;
-  if (isDef(src)) msg.src = src;
-  if (isDef(ch)) msg.ch = ch;
-  if (isDef(sid)) msg.sid = sid;
-  if (isDef(ok)) msg.ok = ok;
-
-  return JSON.stringify(msg);
-}
-
-export function packObj(obj) {
-  const msg = { ...baseMessage(), ...obj };
-  return JSON.stringify(msg);
-}
-
-export function unpack(textMsg) {
-  return JSON.parse(textMsg);
-}
-
-export function unpackVerify(textMsg) {
-  // TODO: Perform validation etc here
-  return unpack(textMsg);
+export default class Tiip {
+  constructor(from) {
+    if (typeof from === 'string') {
+      this.type = JSON.parse(from).type;
+    } else if (typeof from === 'object' && from !== null) {
+      this.type = from.type;
+    }
+  }
+  get type() {
+    return this.type;
+  }
+  set type(t) {
+    this.type = t;
+  }
 }
