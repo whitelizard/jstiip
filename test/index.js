@@ -1,13 +1,13 @@
 // import chai from 'chai';
 import test from 'tape';
+// import isString from 'lodash.isstring';
 import Tiip from '../src';
-
-function verifyAllKeyTypes(t, tiip) {
-  t.ok(Array.isArray(tiip.pl));
-}
 
 test('From Json string', t => {
   const fromJson = JSON.stringify({
+    pv: 'tiip.2.0',
+    ts: '123',
+    ct: '123',
     type: 'req',
     mid: '0',
     sid: 'X',
@@ -21,16 +21,21 @@ test('From Json string', t => {
     pl: [1.3, 4],
   });
   const msg = new Tiip(fromJson);
-  verifyAllKeyTypes(t, msg);
+  t.ok(msg);
+  t.end();
 });
 
-test('From Json string, bad key', t => {
+test('From Json string, bad type of `type`', t => {
   const fromJson = JSON.stringify({ type: 1 });
-  t.throws(new Tiip(fromJson));
+  t.throws(() => new Tiip(fromJson));
+  t.end();
 });
 
 test('From JS object', t => {
   const fromJS = {
+    pv: 'tiip.2.0',
+    ts: '123',
+    ct: '123',
     type: 'req',
     mid: '0',
     sid: 'X',
@@ -44,7 +49,8 @@ test('From JS object', t => {
     pl: [1.3, 4],
   };
   const msg = new Tiip(fromJS);
-  verifyAllKeyTypes(t, msg);
+  t.ok(msg);
+  t.end();
 });
 
 //

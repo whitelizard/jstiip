@@ -1,4 +1,17 @@
-export const fields = ['mid', 'sid', 'type', 'ok', 'ten', 'src', 'targ', 'arg', 'ch', 'sig', 'pl'];
+import isString from 'lodash.isstring';
+import isArray from 'lodash.isarray';
+import isBoolean from 'lodash.isboolean';
+import isObject from 'lodash.isobject';
+import isUndefined from 'lodash.isundefined';
+import hasIn from 'lodash.hasin';
+
+const stringFields = ['mid', 'sid', 'type', 'ten', 'ch', 'sig', 'pv', 'ts', 'ct'];
+const arrayFields = ['src', 'targ', 'pl'];
+const objectFields = ['arg'];
+const booleanFields = ['ok'];
+const mandatoryFields = ['pv', 'ts'];
+
+export const fields = [...stringFields, ...arrayFields, ...objectFields, ...booleanFields];
 
 function baseMessage() {
   return {
@@ -43,18 +56,62 @@ function baseMessage() {
 //   return unpack(textMsg);
 // }
 
+export function verifyKeyTypes(tiip) {
+  stringFields.forEach(k => {
+    if (!isUndefined(tiip[k]) && !isString(tiip[k])) {
+      throw new TypeError(`'${k}' should be a String`);
+    }
+  });
+  arrayFields.forEach(k => {
+    if (!isUndefined(tiip[k]) && !isArray(tiip[k])) {
+      throw new TypeError(`'${k}' should be an Array`);
+    }
+    // if (k === 'targ' || k === 'src') {
+    //
+    // }
+  });
+  objectFields.forEach(k => {
+    if (!isUndefined(tiip[k]) && !isObject(tiip[k])) {
+      throw new TypeError(`'${k}' should be an Object`);
+    }
+  });
+  booleanFields.forEach(k => {
+    if (!isUndefined(tiip[k]) && !isBoolean(tiip[k])) {
+      throw new TypeError(`'${k}' should be a boolean`);
+    }
+  });
+}
+
+export function verifyVersion(tiip) {
+  if (tiip.pv !== 'tiip.2.0') throw new Error('Wrong protocol version');
+}
+
+export function verifyMandatory(tiip) {
+  if (!mandatoryFields.every(k => hasIn(tiip, k))) throw new TypeError('Mandatory field missing');
+}
+
+export function verify(tiip) {
+  verifyKeyTypes(tiip);
+  verifyMandatory(tiip);
+  verifyVersion(tiip);
+}
+
 export default class Tiip {
   constructor(from) {
-    if (typeof from === 'string') {
-      this.type = JSON.parse(from).type;
-    } else if (typeof from === 'object' && from !== null) {
-      this.type = from.type;
+    this._type = '';
+    if (isString(from)) {
+      const obj = JSON.parse(from);
+      verify(obj);
+      this._type = obj.type;
+    } else if (isObject(from)) {
+      verify(from);
+      this._type = from.type;
     }
   }
   get type() {
-    return this.type;
+    return this._type;
   }
   set type(t) {
-    this.type = t;
+    this._type = t;
   }
 }
