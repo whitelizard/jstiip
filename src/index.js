@@ -5,6 +5,8 @@ import isObject from 'lodash.isobject';
 import isUndefined from 'lodash.isundefined';
 import hasIn from 'lodash.hasin';
 
+const version = '2.0';
+const pv = `tiip.${version}`;
 const stringFields = ['mid', 'sid', 'type', 'ten', 'ch', 'sig', 'pv', 'ts', 'ct'];
 const arrayFields = ['src', 'targ', 'pl'];
 const objectFields = ['arg'];
@@ -13,73 +15,32 @@ const mandatoryFields = ['pv', 'ts'];
 
 export const fields = [...stringFields, ...arrayFields, ...objectFields, ...booleanFields];
 
-function baseMessage() {
-  return {
-    pv: 'tiip.2.0',
-    ts: String(Date.now() / 1000),
-  };
-}
+const ts = () => String(Date.now() / 1000);
+const baseMessage = () => ({ pv, ts: ts() });
 
-// function isDef(value) {
-//   return typeof value !== 'undefined';
-// }
-//
-// export function pack({ type, targ, sig, arg, pl, mid, ten, src, ch, sid, ok }) {
-//   const msg = baseMessage();
-//
-//   if (isDef(type)) msg.type = type;
-//   if (isDef(targ)) msg.targ = targ;
-//   if (isDef(sig)) msg.sig = sig;
-//   if (isDef(arg)) msg.arg = arg;
-//   if (isDef(pl)) msg.pl = pl;
-//   if (isDef(mid)) msg.mid = mid;
-//   if (isDef(ten)) msg.ten = ten;
-//   if (isDef(src)) msg.src = src;
-//   if (isDef(ch)) msg.ch = ch;
-//   if (isDef(sid)) msg.sid = sid;
-//   if (isDef(ok)) msg.ok = ok;
-//
-//   return JSON.stringify(msg);
-// }
-//
-// export function packObj(obj) {
-//   const msg = { ...baseMessage(), ...obj };
-//   return JSON.stringify(msg);
-// }
-//
-// export function unpack(textMsg) {
-//   return JSON.parse(textMsg);
-// }
-//
-// export function unpackVerify(textMsg) {
-//   // TODO: Perform validation etc here
-//   return unpack(textMsg);
-// }
-
-export function verifyKeyTypes(tiip) {
-  stringFields.forEach(k => {
+export function verifyTypes(tiip) {
+  for (const k of stringFields) {
     if (!isUndefined(tiip[k]) && !isString(tiip[k])) {
       throw new TypeError(`'${k}' should be a String`);
     }
-  });
-  arrayFields.forEach(k => {
-    if (!isUndefined(tiip[k]) && !isArray(tiip[k])) {
-      throw new TypeError(`'${k}' should be an Array`);
-    }
-    // if (k === 'targ' || k === 'src') {
-    //
-    // }
-  });
-  objectFields.forEach(k => {
-    if (!isUndefined(tiip[k]) && !isObject(tiip[k])) {
-      throw new TypeError(`'${k}' should be an Object`);
-    }
-  });
-  booleanFields.forEach(k => {
-    if (!isUndefined(tiip[k]) && !isBoolean(tiip[k])) {
-      throw new TypeError(`'${k}' should be a boolean`);
-    }
-  });
+  }
+  if (!isUndefined(tiip.src)) {
+    if (!isArray(tiip.src)) throw new TypeError("'src' should be an Array");
+    if (!tiip.src.every(isString)) throw new TypeError("'src' should contain strings");
+  }
+  if (!isUndefined(tiip.targ)) {
+    if (!isArray(tiip.targ)) throw new TypeError("'targ' should be an Array");
+    if (!tiip.targ.every(isString)) throw new TypeError("'targ' should contain strings");
+  }
+  if (!isUndefined(tiip.pl) && !isArray(tiip.pl)) throw new TypeError("'pl' should be an Array");
+  if (!isUndefined(tiip.arg) && !isObject(tiip.arg)) {
+    throw new TypeError("'arg' should be an Array");
+  }
+  if (!isUndefined(tiip.ok) && !isBoolean(tiip.ok)) throw new TypeError("'ok' should be an Array");
+
+  // if (k === 'targ' || k === 'src') {
+  //
+  // }
 }
 
 export function verifyVersion(tiip) {
@@ -87,31 +48,36 @@ export function verifyVersion(tiip) {
 }
 
 export function verifyMandatory(tiip) {
-  if (!mandatoryFields.every(k => hasIn(tiip, k))) throw new TypeError('Mandatory field missing');
+  // if (!mandatoryFields.every(k => hasIn(tiip, k)))
+  //   throw new TypeError('Mandatory field missing');
+  if (!hasIn(tiip, 'pv') || !hasIn(tiip, 'ts')) throw new TypeError('Mandatory field missing');
 }
 
 export function verify(tiip) {
-  verifyKeyTypes(tiip);
-  verifyMandatory(tiip);
-  verifyVersion(tiip);
+  verifyTypes(tiip);
 }
 
 export default class Tiip {
   constructor(from) {
-    this._type = '';
+    this._$_pv = pv;
     if (isString(from)) {
       const obj = JSON.parse(from);
+      if (isUndefined(obj.ts)) obj.ts = ts();
       verify(obj);
-      this._type = obj.type;
+      this._$_type = obj.type;
     } else if (isObject(from)) {
+      if (isUndefined(from.ts)) from.ts = ts(); // eslint-disable-line
       verify(from);
-      this._type = from.type;
+      this._$_type = from.type;
     }
   }
   get type() {
-    return this._type;
+    return this._$_type;
   }
   set type(t) {
-    this._type = t;
+    this._$_type = t;
+  }
+  toJson() {
+    return JSON.stringify(this).replace(/_\$_/g, '');
   }
 }
