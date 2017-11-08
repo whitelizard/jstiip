@@ -7,16 +7,16 @@ import hasIn from 'lodash.hasin';
 
 const version = '2.0';
 const pv = `tiip.${version}`;
-const stringFields = ['mid', 'sid', 'type', 'ten', 'ch', 'sig', 'pv', 'ts', 'ct'];
+const stringFields = ['pv', 'ts', 'ct', 'ten', 'sid', 'mid', 'type', 'ch', 'sig'];
 const arrayFields = ['src', 'targ', 'pl'];
 const objectFields = ['arg'];
 const booleanFields = ['ok'];
-const mandatoryFields = ['pv', 'ts'];
+// const mandatoryFields = ['pv', 'ts'];
 
 export const fields = [...stringFields, ...arrayFields, ...objectFields, ...booleanFields];
 
 const ts = () => String(Date.now() / 1000);
-const baseMessage = () => ({ pv, ts: ts() });
+// const baseMessage = () => ({ pv, ts: ts() });
 
 export function verifyTypes(tiip) {
   for (const k of stringFields) {
@@ -55,20 +55,26 @@ export function verifyMandatory(tiip) {
 
 export function verify(tiip) {
   verifyTypes(tiip);
+  verifyMandatory(tiip);
+  verifyVersion(tiip);
 }
 
 export default class Tiip {
   constructor(from) {
-    this._$_pv = pv;
+    let obj = {};
     if (isString(from)) {
-      const obj = JSON.parse(from);
-      if (isUndefined(obj.ts)) obj.ts = ts();
-      verify(obj);
-      this._$_type = obj.type;
+      obj = JSON.parse(from);
     } else if (isObject(from)) {
-      if (isUndefined(from.ts)) from.ts = ts(); // eslint-disable-line
-      verify(from);
-      this._$_type = from.type;
+      obj = from;
+    }
+    obj.pv = pv;
+    if (isUndefined(obj.ts)) obj.ts = ts();
+    verify(obj);
+    this._$_pv = obj.pv;
+    for (const k of fields) {
+      if (!isUndefined(obj[k])) {
+        this[`_$_${k}`] = obj[k];
+      }
     }
   }
   get type() {
@@ -76,6 +82,12 @@ export default class Tiip {
   }
   set type(t) {
     this._$_type = t;
+  }
+  get pv() {
+    return this._$_pv;
+  }
+  set pv(t) {
+    this._$_pv = t;
   }
   toJson() {
     return JSON.stringify(this).replace(/_\$_/g, '');

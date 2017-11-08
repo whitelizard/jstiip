@@ -1,7 +1,7 @@
 // import chai from 'chai';
 import test from 'tape';
 // import isString from 'lodash.isstring';
-import Tiip from '../src';
+import Tiip, { fields } from '../src';
 
 test('From Json string', t => {
   const fromJson = JSON.stringify({
@@ -20,7 +20,7 @@ test('From Json string', t => {
     pl: [1.3, 4],
   });
   const msg = new Tiip(fromJson);
-  t.ok(msg);
+  t.ok(msg.pv === 'tiip.2.0');
   t.end();
 });
 
@@ -92,7 +92,11 @@ test('toJson', t => {
   console.log(msg.toJson());
   fromJS = { pv: 'tiip.2.0', ...fromJS };
   console.log(JSON.stringify(fromJS));
-  t.ok(msg.toJson() === JSON.stringify(fromJS));
+  const ref = {};
+  for (const k of fields) {
+    ref[k] = fromJS[k];
+  }
+  t.ok(msg.toJson() === JSON.stringify(ref));
   t.end();
 });
 
