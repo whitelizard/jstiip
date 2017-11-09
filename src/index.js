@@ -5,18 +5,17 @@ import isObject from 'lodash.isobject';
 import isUndefined from 'lodash.isundefined';
 import hasIn from 'lodash.hasin';
 
-const version = '2.0';
-const pv = `tiip.${version}`;
-const stringFields = ['pv', 'ts', 'ct', 'ten', 'sid', 'mid', 'type', 'ch', 'sig'];
-const arrayFields = ['src', 'targ', 'pl'];
-const objectFields = ['arg'];
-const booleanFields = ['ok'];
+export const version = '2.0';
+export const pv = `tiip.${version}`;
+export const stringFields = ['pv', 'ts', 'ct', 'ten', 'sid', 'mid', 'type', 'ch', 'sig'];
+export const arrayFields = ['src', 'targ', 'pl'];
+export const objectFields = ['arg'];
+export const booleanFields = ['ok'];
 // const mandatoryFields = ['pv', 'ts'];
 
 export const fields = [...stringFields, ...arrayFields, ...objectFields, ...booleanFields];
 
-const ts = () => String(Date.now() / 1000);
-// const baseMessage = () => ({ pv, ts: ts() });
+export const ts = () => String(Date.now() / 1000);
 
 export function verifyTypes(tiip) {
   for (const k of stringFields) {
@@ -77,17 +76,134 @@ export default class Tiip {
       }
     }
   }
-  get type() {
-    return this._$_type;
+  tsUpdate() {
+    this._$_ts = ts();
   }
-  set type(t) {
-    this._$_type = t;
+  ctUpdate() {
+    this._$_ct = ts();
   }
   get pv() {
     return this._$_pv;
   }
-  set pv(t) {
-    this._$_pv = t;
+  get ts() {
+    return this._$_ts;
+  }
+  get ct() {
+    return this._$_ct;
+  }
+  get type() {
+    return this._$_type;
+  }
+  get mid() {
+    return this._$_mid;
+  }
+  get sid() {
+    return this._$_sid;
+  }
+  get ten() {
+    return this._$_ten;
+  }
+  get targ() {
+    return this._$_targ;
+  }
+  get src() {
+    return this._$_src;
+  }
+  get ok() {
+    return this._$_ok;
+  }
+  get ch() {
+    return this._$_ch;
+  }
+  get sig() {
+    return this._$_sig;
+  }
+  get arg() {
+    return this._$_arg;
+  }
+  get pl() {
+    return this._$_pl;
+  }
+  set pv(v) {
+    throw new TypeError("'pv' is not writable");
+  }
+  set type(v) {
+    if (!isString(v)) {
+      throw new TypeError("'type' should be a String");
+    }
+    this._$_type = v;
+  }
+  set ts(v) {
+    if (!isString(v)) {
+      throw new TypeError("'type' should be a String");
+    }
+    this._$_ts = v;
+  }
+  set ct(v) {
+    if (!isString(v)) {
+      throw new TypeError("'ct' should be a String");
+    }
+    this._$_ct = v;
+  }
+  set ten(v) {
+    if (!isString(v)) {
+      throw new TypeError("'ten' should be a String");
+    }
+    this._$_ten = v;
+  }
+  set sid(v) {
+    if (!isString(v)) {
+      throw new TypeError("'sid' should be a String");
+    }
+    this._$_sid = v;
+  }
+  set mid(v) {
+    if (!isString(v)) {
+      throw new TypeError("'mid' should be a String");
+    }
+    this._$_mid = v;
+  }
+  set ch(v) {
+    if (!isString(v)) {
+      throw new TypeError("'ch' should be a String");
+    }
+    this._$_ch = v;
+  }
+  set sig(v) {
+    if (!isString(v)) {
+      throw new TypeError("'sig' should be a String");
+    }
+    this._$_sig = v;
+  }
+  set ok(v) {
+    if (!isBoolean(v)) {
+      throw new TypeError("'ok' should be a boolean");
+    }
+    this._$_ok = v;
+  }
+  set targ(v) {
+    if (!isArray(v)) {
+      throw new TypeError("'targ' should be an Array");
+    }
+    this._$_targ = v;
+  }
+  set src(v) {
+    if (!isArray(v)) {
+      throw new TypeError("'src' should be an Array");
+    }
+    this._$_src = v;
+  }
+  set pl(v) {
+    if (!isArray(v)) {
+      throw new TypeError("'pl' should be an Array");
+    }
+    this._$_pl = v;
+  }
+  set arg(v) {
+    if (!isObject(v)) {
+      throw new TypeError("'arg' should be an Object");
+    }
+    this._$_arg = v;
   }
   toJson() {
     return JSON.stringify(this).replace(/_\$_/g, '');
