@@ -48,7 +48,12 @@ export function verifyMandatory(tiip) {
   if (!hasIn(tiip, 'pv') || !hasIn(tiip, 'ts')) throw new TypeError('Mandatory field missing');
 }
 
+export function verifyValidKeys(tiip) {
+  if (!Object.keys(tiip).every(k => fields.includes(k))) throw new Error('Bad key');
+}
+
 export function verify(tiip) {
+  verifyValidKeys(tiip);
   verifyMandatory(tiip);
   verifyVersion(tiip);
   verifyTypes(tiip);
@@ -57,31 +62,37 @@ export function verify(tiip) {
 export default class Tiip {
   constructor(from) {
     if (isString(from)) {
-      this.fromJS(JSON.parse(from));
+      this.set(JSON.parse(from));
     } else if (isObject(from)) {
-      this.fromJS(from);
+      this.set(from);
     } else {
-      this.fromJS({});
-    }
-  }
-  fromJS(obj) {
-    obj.pv = pv; // eslint-disable-line
-    if (isUndefined(obj.ts)) obj.ts = ts(); // eslint-disable-line
-    verify(obj);
-    for (const k of fields) {
-      if (!isUndefined(obj[k])) {
-        this[`_$${k}`] = obj[k];
-      }
+      this.set({});
     }
   }
   fromJson(str) {
-    this.fromJS(JSON.parse(str));
+    this.set(JSON.parse(str));
   }
   tsUpdate() {
     this._$ts = ts();
   }
   ctUpdate() {
     this._$ct = ts();
+  }
+  set(obj, value) {
+    if (isString(obj)) {
+      // key
+      if (!fields.includes(obj)) throw new Error('Bad key');
+      this[obj] = value;
+    } else if (isObject(obj)) {
+      obj.pv = pv; // eslint-disable-line
+      if (isUndefined(obj.ts)) obj.ts = ts(); // eslint-disable-line
+      verify(obj);
+      for (const k of fields) {
+        if (!isUndefined(obj[k])) {
+          this[`_$${k}`] = obj[k];
+        }
+      }
+    } else throw new TypeError('Can only set a key or from an object');
   }
   get pv() {
     return this._$pv;

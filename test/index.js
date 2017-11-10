@@ -44,17 +44,7 @@ test('Construct from Json string with bad keys', t => {
     something: 3,
     idk: [true, false],
   });
-  const msg = new Tiip(fromJson);
-  t.ok(msg.pv === 'tiip.2.0');
-  t.ok(msg.timestamp === undefined);
-  t.ok(msg.something === undefined);
-  t.ok(msg.idk === undefined);
-  const obj = msg.toJS();
-  t.ok(obj.pv === 'tiip.2.0');
-  t.ok(obj.ts);
-  t.ok(obj.timestamp === undefined);
-  t.ok(obj.something === undefined);
-  t.ok(obj.idk === undefined);
+  t.throws(() => new Tiip(fromJson));
   t.end();
 });
 
@@ -94,22 +84,12 @@ test('Construct from JS object', t => {
 });
 
 test('Construct from JS object with bad keys', t => {
-  const fromJson = JSON.stringify({
+  const from = {
     timestamp: '123',
     something: 3,
     idk: [true, false],
-  });
-  const msg = new Tiip(fromJson);
-  t.ok(msg.pv === 'tiip.2.0');
-  t.ok(msg.timestamp === undefined);
-  t.ok(msg.something === undefined);
-  t.ok(msg.idk === undefined);
-  const obj = msg.toJS();
-  t.ok(obj.pv === 'tiip.2.0');
-  t.ok(obj.ts);
-  t.ok(obj.timestamp === undefined);
-  t.ok(obj.something === undefined);
-  t.ok(obj.idk === undefined);
+  };
+  t.throws(() => new Tiip(from));
   t.end();
 });
 
