@@ -36,10 +36,6 @@ export function verifyTypes(tiip) {
     throw new TypeError("'arg' should be an Array");
   }
   if (!isUndefined(tiip.ok) && !isBoolean(tiip.ok)) throw new TypeError("'ok' should be an Array");
-
-  // if (k === 'targ' || k === 'src') {
-  //
-  // }
 }
 
 export function verifyVersion(tiip) {
@@ -53,159 +49,149 @@ export function verifyMandatory(tiip) {
 }
 
 export function verify(tiip) {
-  verifyTypes(tiip);
   verifyMandatory(tiip);
   verifyVersion(tiip);
+  verifyTypes(tiip);
 }
 
 export default class Tiip {
   constructor(from) {
-    let obj = {};
     if (isString(from)) {
-      obj = JSON.parse(from);
+      this.fromJS(JSON.parse(from));
     } else if (isObject(from)) {
-      obj = from;
+      this.fromJS(from);
+    } else {
+      this.fromJS({});
     }
-    obj.pv = pv;
-    if (isUndefined(obj.ts)) obj.ts = ts();
+  }
+  fromJS(obj) {
+    obj.pv = pv; // eslint-disable-line
+    if (isUndefined(obj.ts)) obj.ts = ts(); // eslint-disable-line
     verify(obj);
-    this._$_pv = obj.pv;
     for (const k of fields) {
       if (!isUndefined(obj[k])) {
-        this[`_$_${k}`] = obj[k];
+        this[`_$${k}`] = obj[k];
       }
     }
   }
+  fromJson(str) {
+    this.fromJS(JSON.parse(str));
+  }
   tsUpdate() {
-    this._$_ts = ts();
+    this._$ts = ts();
   }
   ctUpdate() {
-    this._$_ct = ts();
+    this._$ct = ts();
   }
   get pv() {
-    return this._$_pv;
+    return this._$pv;
   }
   get ts() {
-    return this._$_ts;
+    return this._$ts;
   }
   get ct() {
-    return this._$_ct;
+    return this._$ct;
   }
   get type() {
-    return this._$_type;
+    return this._$type;
   }
   get mid() {
-    return this._$_mid;
+    return this._$mid;
   }
   get sid() {
-    return this._$_sid;
+    return this._$sid;
   }
   get ten() {
-    return this._$_ten;
+    return this._$ten;
   }
   get targ() {
-    return this._$_targ;
+    return this._$targ;
   }
   get src() {
-    return this._$_src;
+    return this._$src;
   }
   get ok() {
-    return this._$_ok;
+    return this._$ok;
   }
   get ch() {
-    return this._$_ch;
+    return this._$ch;
   }
   get sig() {
-    return this._$_sig;
+    return this._$sig;
   }
   get arg() {
-    return this._$_arg;
+    return this._$arg;
   }
   get pl() {
-    return this._$_pl;
+    return this._$pl;
   }
   set pv(v) {
     throw new TypeError("'pv' is not writable");
   }
   set type(v) {
-    if (!isString(v)) {
-      throw new TypeError("'type' should be a String");
-    }
-    this._$_type = v;
+    if (!isString(v)) throw new TypeError("'type' should be a String");
+    this._$type = v;
   }
   set ts(v) {
-    if (!isString(v)) {
-      throw new TypeError("'type' should be a String");
-    }
-    this._$_ts = v;
+    if (!isString(v)) throw new TypeError("'type' should be a String");
+    this._$ts = v;
   }
   set ct(v) {
-    if (!isString(v)) {
-      throw new TypeError("'ct' should be a String");
-    }
-    this._$_ct = v;
+    if (!isString(v)) throw new TypeError("'ct' should be a String");
+    this._$ct = v;
   }
   set ten(v) {
-    if (!isString(v)) {
-      throw new TypeError("'ten' should be a String");
-    }
-    this._$_ten = v;
+    if (!isString(v)) throw new TypeError("'ten' should be a String");
+    this._$ten = v;
   }
   set sid(v) {
-    if (!isString(v)) {
-      throw new TypeError("'sid' should be a String");
-    }
-    this._$_sid = v;
+    if (!isString(v)) throw new TypeError("'sid' should be a String");
+    this._$sid = v;
   }
   set mid(v) {
-    if (!isString(v)) {
-      throw new TypeError("'mid' should be a String");
-    }
-    this._$_mid = v;
+    if (!isString(v)) throw new TypeError("'mid' should be a String");
+    this._$mid = v;
   }
   set ch(v) {
-    if (!isString(v)) {
-      throw new TypeError("'ch' should be a String");
-    }
-    this._$_ch = v;
+    if (!isString(v)) throw new TypeError("'ch' should be a String");
+    this._$ch = v;
   }
   set sig(v) {
-    if (!isString(v)) {
-      throw new TypeError("'sig' should be a String");
-    }
-    this._$_sig = v;
+    if (!isString(v)) throw new TypeError("'sig' should be a String");
+    this._$sig = v;
   }
   set ok(v) {
-    if (!isBoolean(v)) {
-      throw new TypeError("'ok' should be a boolean");
-    }
-    this._$_ok = v;
+    if (!isBoolean(v)) throw new TypeError("'ok' should be a boolean");
+    this._$ok = v;
   }
   set targ(v) {
-    if (!isArray(v)) {
-      throw new TypeError("'targ' should be an Array");
-    }
-    this._$_targ = v;
+    if (!isArray(v)) throw new TypeError("'targ' should be an Array");
+    if (!v.every(isString)) throw new TypeError("'targ' should contain strings");
+    this._$targ = v;
   }
   set src(v) {
-    if (!isArray(v)) {
-      throw new TypeError("'src' should be an Array");
-    }
-    this._$_src = v;
+    if (!isArray(v)) throw new TypeError("'src' should be an Array");
+    if (!v.every(isString)) throw new TypeError("'src' should contain strings");
+    this._$src = v;
   }
   set pl(v) {
-    if (!isArray(v)) {
-      throw new TypeError("'pl' should be an Array");
-    }
-    this._$_pl = v;
+    if (!isArray(v)) throw new TypeError("'pl' should be an Array");
+    this._$pl = v;
   }
   set arg(v) {
-    if (!isObject(v)) {
-      throw new TypeError("'arg' should be an Object");
+    if (!isObject(v)) throw new TypeError("'arg' should be an Object");
+    this._$arg = v;
+  }
+  toJS() {
+    const obj = {};
+    for (const k of fields) {
+      if (!isUndefined(this[`_$${k}`])) {
+        obj[k] = this[`_$${k}`];
+      }
     }
-    this._$_arg = v;
+    return obj;
   }
   toJson() {
-    return JSON.stringify(this).replace(/_\$_/g, '');
+    return JSON.stringify(this.toJS());
   }
 }
