@@ -31,7 +31,9 @@ export function verifyTypes(tiip) {
     if (!Array.isArray(tiip.targ)) throw new TypeError("'targ' should be an Array");
     if (!tiip.targ.every(isString)) throw new TypeError("'targ' should contain strings");
   }
-  if (!isUndefined(tiip.pl) && !Array.isArray(tiip.pl)) throw new TypeError("'pl' should be an Array");
+  if (!isUndefined(tiip.pl) && !Array.isArray(tiip.pl)) {
+    throw new TypeError("'pl' should be an Array");
+  }
   if (!isUndefined(tiip.arg) && !isObject(tiip.arg)) {
     throw new TypeError("'arg' should be an Array");
   }
@@ -62,37 +64,26 @@ export function verify(tiip) {
 export default class Tiip {
   constructor(from) {
     if (isString(from)) {
-      this.set(JSON.parse(from));
+      this.init(JSON.parse(from));
     } else if (isObject(from)) {
-      this.set(from);
+      this.init(from);
     } else {
-      this.set({});
+      this.init({});
     }
   }
   fromJson(str) {
-    this.set(JSON.parse(str));
+    this.init(JSON.parse(str));
   }
-  tsUpdate() {
-    this._$ts = ts();
-  }
-  ctUpdate() {
-    this._$ct = ts();
-  }
-  set(obj, value) {
-    if (isString(obj)) {
-      // key
-      if (!fields.includes(obj)) throw new Error('Bad key');
-      this[obj] = value;
-    } else if (isObject(obj)) {
-      obj.pv = pv; // eslint-disable-line
-      if (isUndefined(obj.ts)) obj.ts = ts(); // eslint-disable-line
-      verify(obj);
-      for (const k of fields) {
-        if (!isUndefined(obj[k])) {
-          this[`_$${k}`] = obj[k];
-        }
+  fromJS(obj) {
+    if (!isObject(obj)) throw new TypeError('Can only init from an object');
+    obj.pv = pv; // eslint-disable-line
+    if (isUndefined(obj.ts)) obj.ts = ts(); // eslint-disable-line
+    verify(obj);
+    for (const k of fields) {
+      if (!isUndefined(obj[k])) {
+        this[`_$${k}`] = obj[k];
       }
-    } else throw new TypeError('Can only set a key or from an object');
+    }
   }
   get pv() {
     return this._$pv;
@@ -192,6 +183,12 @@ export default class Tiip {
   set arg(v) {
     if (!isObject(v)) throw new TypeError("'arg' should be an Object");
     this._$arg = v;
+  }
+  tsUpdate() {
+    this._$ts = ts();
+  }
+  ctUpdate() {
+    this._$ct = ts();
   }
   toJS() {
     const obj = {};
