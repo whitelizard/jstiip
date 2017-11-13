@@ -1,5 +1,5 @@
 import isString from 'lodash.isstring';
-import isArray from 'lodash.isarray';
+// import isArray from 'lodash.isarray';
 import isBoolean from 'lodash.isboolean';
 import isObject from 'lodash.isobject';
 import isUndefined from 'lodash.isundefined';
@@ -24,14 +24,14 @@ export function verifyTypes(tiip) {
     }
   }
   if (!isUndefined(tiip.src)) {
-    if (!isArray(tiip.src)) throw new TypeError("'src' should be an Array");
+    if (!Array.isArray(tiip.src)) throw new TypeError("'src' should be an Array");
     if (!tiip.src.every(isString)) throw new TypeError("'src' should contain strings");
   }
   if (!isUndefined(tiip.targ)) {
-    if (!isArray(tiip.targ)) throw new TypeError("'targ' should be an Array");
+    if (!Array.isArray(tiip.targ)) throw new TypeError("'targ' should be an Array");
     if (!tiip.targ.every(isString)) throw new TypeError("'targ' should contain strings");
   }
-  if (!isUndefined(tiip.pl) && !isArray(tiip.pl)) throw new TypeError("'pl' should be an Array");
+  if (!isUndefined(tiip.pl) && !Array.isArray(tiip.pl)) throw new TypeError("'pl' should be an Array");
   if (!isUndefined(tiip.arg) && !isObject(tiip.arg)) {
     throw new TypeError("'arg' should be an Array");
   }
@@ -176,17 +176,17 @@ export default class Tiip {
     this._$ok = v;
   }
   set targ(v) {
-    if (!isArray(v)) throw new TypeError("'targ' should be an Array");
+    if (!Array.isArray(v)) throw new TypeError("'targ' should be an Array");
     if (!v.every(isString)) throw new TypeError("'targ' should contain strings");
     this._$targ = v;
   }
   set src(v) {
-    if (!isArray(v)) throw new TypeError("'src' should be an Array");
+    if (!Array.isArray(v)) throw new TypeError("'src' should be an Array");
     if (!v.every(isString)) throw new TypeError("'src' should contain strings");
     this._$src = v;
   }
   set pl(v) {
-    if (!isArray(v)) throw new TypeError("'pl' should be an Array");
+    if (!Array.isArray(v)) throw new TypeError("'pl' should be an Array");
     this._$pl = v;
   }
   set arg(v) {
