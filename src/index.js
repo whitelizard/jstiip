@@ -64,18 +64,17 @@ export function verify(tiip) {
 export default class Tiip {
   constructor(from) {
     if (isString(from)) {
-      this.init(JSON.parse(from));
+      this.fromJS(JSON.parse(from));
     } else if (isObject(from)) {
-      this.init(from);
+      this.fromJS(from);
     } else {
-      this.init({});
+      this.fromJS({});
     }
   }
   fromJson(str) {
-    this.init(JSON.parse(str));
+    this.fromJS(JSON.parse(str));
   }
   fromJS(obj) {
-    if (!isObject(obj)) throw new TypeError('Can only init from an object');
     obj.pv = pv; // eslint-disable-line
     if (isUndefined(obj.ts)) obj.ts = ts(); // eslint-disable-line
     verify(obj);

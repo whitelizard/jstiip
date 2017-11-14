@@ -37,17 +37,17 @@ The contructor to the class can take a JSON string or a JS object to initiate th
 
 Initiate the message from a JSON string (if you need to do it after you create the message object).
 
-| Argument | Type              | Default | Description                   |
-| -------- | ----------------- | ------- | ----------------------------- |
-| `from`   | `string`/`Object` |         | JSON string **OR** JS object. |
+| Argument | Type     | Default | Description        |
+| -------- | -------- | ------- | ------------------ |
+| `str`    | `string` |         | JSON string (Tiip) |
 
 ### `fromJS`
 
 Initiate the message from a JS object (if you need to do it after you create the message object).
 
-| Argument | Type              | Default | Description                   |
-| -------- | ----------------- | ------- | ----------------------------- |
-| `from`   | `string`/`Object` |         | JSON string **OR** JS object. |
+| Argument | Type     | Default | Description      |
+| -------- | -------- | ------- | ---------------- |
+| `obj`    | `Object` |         | JS object (Tiip) |
 
 ### `tsUpdate`
 
