@@ -25,42 +25,73 @@ ws.send(msg.toJson());
 * [`toJS`](#tojs)
 * [`toJson`](#tojson)
 
-### `Tiip`
+## `Tiip`
 
 The contructor to the class can take a JSON string or a JS object to initiate the message with.
 
-| Argument | Type              | Default | Description                   |
-| -------- | ----------------- | ------- | ----------------------------- |
-| `from`   | `string`/`Object` |         | JSON string **OR** JS object. |
+| Argument      | Type              | Default | Description                                             |
+| ------------- | ----------------- | ------- | ------------------------------------------------------- |
+| `from`        | `string`/`Object` |         | JSON string **OR** JS object.                           |
+| `loadingTiip` | `boolean`         | `false` | If not a new message, but a Tiip that should be loaded. |
 
-### `fromJson`
+## `fromJson`
 
 Initiate the message from a JSON string (if you need to do it after you create the message object).
 
-| Argument | Type     | Default | Description        |
-| -------- | -------- | ------- | ------------------ |
-| `str`    | `string` |         | JSON string (Tiip) |
+| Argument      | Type      | Default | Description                                             |
+| ------------- | --------- | ------- | ------------------------------------------------------- |
+| `str`         | `string`  |         | JSON string (Tiip)                                      |
+| `loadingTiip` | `boolean` | `false` | If not a new message, but a Tiip that should be loaded. |
 
-### `fromJS`
+## `fromJS`
 
 Initiate the message from a JS object (if you need to do it after you create the message object).
 
-| Argument | Type     | Default | Description      |
-| -------- | -------- | ------- | ---------------- |
-| `obj`    | `Object` |         | JS object (Tiip) |
+| Argument      | Type      | Default | Description                                             |
+| ------------- | --------- | ------- | ------------------------------------------------------- |
+| `obj`         | `Object`  |         | JS object (Tiip)                                        |
+| `loadingTiip` | `boolean` | `false` | If not a new message, but a Tiip that should be loaded. |
 
-### `tsUpdate`
+## `tsUpdate`
 
 Set the `ts` (timestamp) field to current time (right now).
 
-### `ctUpdate`
+## `ctUpdate`
 
 Set the `ct` (client time) field to current time (right now).
 
-### `toJS`
+## `toJS`
 
 Returns the message as a JS object.
 
-### `toJson`
+## `toJson`
 
 Returns the message as a Json string.
+
+## Getters / Setters
+
+* `pv`: get
+* `ts`: get/set (see also `tsUpdate`)
+* `ct`: get/set (see also `ctUpdate`)
+* `type`: get/set
+* `mid`: get/set
+* `sid`: get/set
+* `ten`: get/set
+* `targ`: get/set
+* `src`: get/set
+* `ok`: get/set
+* `ch`: get/set
+* `sig`: get/set
+* `arg`: get/set
+* `pl`: get/set
+
+```js
+import Tiip from 'jstiip';
+const msg = new Tiip();
+
+msg.type = 'pub';
+msg.ch = 'temperature';
+msg.pl = [21.4];
+
+console.log(msg.pv, msg.ts);
+```

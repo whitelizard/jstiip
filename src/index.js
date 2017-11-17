@@ -62,21 +62,23 @@ export function verify(tiip) {
 }
 
 export default class Tiip {
-  constructor(from) {
+  constructor(from, loadingTiip) {
     if (isString(from)) {
-      this.fromJS(JSON.parse(from));
+      this.fromJS(JSON.parse(from), loadingTiip);
     } else if (isObject(from)) {
-      this.fromJS(from);
+      this.fromJS(from, loadingTiip);
     } else {
       this.fromJS({});
     }
   }
-  fromJson(str) {
-    this.fromJS(JSON.parse(str));
+  fromJson(str, loadingTiip) {
+    this.fromJS(JSON.parse(str), loadingTiip);
   }
-  fromJS(obj) {
-    obj.pv = pv; // eslint-disable-line
-    if (isUndefined(obj.ts)) obj.ts = ts(); // eslint-disable-line
+  fromJS(obj, loadingTiip) {
+    if (!loadingTiip) {
+      obj.pv = pv; // eslint-disable-line
+      if (isUndefined(obj.ts)) obj.ts = ts(); // eslint-disable-line
+    }
     verify(obj);
     for (const k of fields) {
       if (!isUndefined(obj[k])) {
@@ -96,11 +98,11 @@ export default class Tiip {
   get type() {
     return this._$type;
   }
-  get mid() {
-    return this._$mid;
-  }
   get sid() {
     return this._$sid;
+  }
+  get mid() {
+    return this._$mid;
   }
   get ten() {
     return this._$ten;
@@ -111,11 +113,11 @@ export default class Tiip {
   get src() {
     return this._$src;
   }
-  get ok() {
-    return this._$ok;
-  }
   get ch() {
     return this._$ch;
+  }
+  get ok() {
+    return this._$ok;
   }
   get sig() {
     return this._$sig;
@@ -129,10 +131,6 @@ export default class Tiip {
   set pv(v) {
     throw new TypeError("'pv' is not writable");
   }
-  set type(v) {
-    if (!isString(v)) throw new TypeError("'type' should be a String");
-    this._$type = v;
-  }
   set ts(v) {
     if (!isString(v)) throw new TypeError("'type' should be a String");
     this._$ts = v;
@@ -141,9 +139,9 @@ export default class Tiip {
     if (!isString(v)) throw new TypeError("'ct' should be a String");
     this._$ct = v;
   }
-  set ten(v) {
-    if (!isString(v)) throw new TypeError("'ten' should be a String");
-    this._$ten = v;
+  set type(v) {
+    if (!isString(v)) throw new TypeError("'type' should be a String");
+    this._$type = v;
   }
   set sid(v) {
     if (!isString(v)) throw new TypeError("'sid' should be a String");
@@ -153,17 +151,9 @@ export default class Tiip {
     if (!isString(v)) throw new TypeError("'mid' should be a String");
     this._$mid = v;
   }
-  set ch(v) {
-    if (!isString(v)) throw new TypeError("'ch' should be a String");
-    this._$ch = v;
-  }
-  set sig(v) {
-    if (!isString(v)) throw new TypeError("'sig' should be a String");
-    this._$sig = v;
-  }
-  set ok(v) {
-    if (!isBoolean(v)) throw new TypeError("'ok' should be a boolean");
-    this._$ok = v;
+  set ten(v) {
+    if (!isString(v)) throw new TypeError("'ten' should be a String");
+    this._$ten = v;
   }
   set targ(v) {
     if (!Array.isArray(v)) throw new TypeError("'targ' should be an Array");
@@ -175,13 +165,25 @@ export default class Tiip {
     if (!v.every(isString)) throw new TypeError("'src' should contain strings");
     this._$src = v;
   }
-  set pl(v) {
-    if (!Array.isArray(v)) throw new TypeError("'pl' should be an Array");
-    this._$pl = v;
+  set ch(v) {
+    if (!isString(v)) throw new TypeError("'ch' should be a String");
+    this._$ch = v;
+  }
+  set ok(v) {
+    if (!isBoolean(v)) throw new TypeError("'ok' should be a boolean");
+    this._$ok = v;
+  }
+  set sig(v) {
+    if (!isString(v)) throw new TypeError("'sig' should be a String");
+    this._$sig = v;
   }
   set arg(v) {
     if (!isObject(v)) throw new TypeError("'arg' should be an Object");
     this._$arg = v;
+  }
+  set pl(v) {
+    if (!Array.isArray(v)) throw new TypeError("'pl' should be an Array");
+    this._$pl = v;
   }
   tsUpdate() {
     this._$ts = ts();

@@ -1,7 +1,7 @@
 // import chai from 'chai';
 import test from 'tape';
 // import isString from 'lodash.isstring';
-import Tiip, { fields, stringFields, arrayFields, objectFields, booleanFields } from '../src';
+import Tiip, { fields, stringFields, arrayFields, objectFields, booleanFields, pv } from '../src';
 
 test('Construct from Json string', t => {
   const fromJson = JSON.stringify({
@@ -128,6 +128,40 @@ test('Construct from JS object with bad keys', t => {
   t.throws(() => new Tiip(from));
   const msg = new Tiip();
   t.throws(() => msg.fromJS(from));
+  t.end();
+});
+
+test('Construct from Tiip, with bad keys/values', t => {
+  let from = {
+    pv: 'tiip.0.0', // wrong version
+    ts: '123',
+  };
+  t.throws(() => new Tiip(from, true));
+  let msg = new Tiip();
+  t.throws(() => msg.fromJS(from, true));
+  t.throws(() => msg.fromJSon(JSON.stringify(from), true));
+  from = {
+    pv, // no ts
+  };
+  t.throws(() => new Tiip(from, true));
+  msg = new Tiip();
+  t.throws(() => msg.fromJS(from, true));
+  t.throws(() => msg.fromJSon(JSON.stringify(from), true));
+  from = {
+    ts: '123', // no pv
+  };
+  t.throws(() => new Tiip(from, true));
+  msg = new Tiip();
+  t.throws(() => msg.fromJS(from, true));
+  t.throws(() => msg.fromJSon(JSON.stringify(from), true));
+  from = {
+    pv,
+    ts: 1, // wrong type
+  };
+  t.throws(() => new Tiip(from, true));
+  msg = new Tiip();
+  t.throws(() => msg.fromJS(from, true));
+  t.throws(() => msg.fromJSon(JSON.stringify(from), true));
   t.end();
 });
 
