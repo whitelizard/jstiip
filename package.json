@@ -26,16 +26,16 @@
   "homepage": "https://github.com/whitelizard/jstiip#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.0.1",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.6",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
-    "eslint": "^4.7.2",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.0.0",
-    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-node": "^5.1.1",
-    "tape": "^4.8.0"
+    "tape": "^4.9.1"
   },
   "dependencies": {
     "lodash.hasin": "^4.5.2",
@@ -43,6 +43,7 @@
     "lodash.isnumber": "^3.0.3",
     "lodash.isobject": "^3.0.2",
     "lodash.isstring": "^4.0.1",
-    "lodash.isundefined": "^3.0.1"
+    "lodash.isundefined": "^3.0.1",
+    "microseconds": "^0.1.0"
   }
 }

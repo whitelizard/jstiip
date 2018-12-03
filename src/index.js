@@ -5,6 +5,17 @@ import isObject from 'lodash.isobject';
 import isUndefined from 'lodash.isundefined';
 import hasIn from 'lodash.hasin';
 
+const μsProcessStart = Date.now() * 1e3;
+const hrTimeProcessStart = global.process && process.hrtime && process.hrtime();
+const μs =
+  global.process && process.hrtime
+    ? () => {
+      // const hr = process.hrtime();
+      const hr = process.hrtime(hrTimeProcessStart);
+      return μsProcessStart + (hr[0] * 1e9 + hr[1]) / 1e3;
+    }
+    : () => Date.now() * 1e3;
+
 export const version = '2.0';
 export const pv = `tiip.${version}`;
 export const stringFields = ['pv', 'ts', 'ct', 'ten', 'sid', 'mid', 'type', 'ch', 'sig'];
@@ -15,7 +26,7 @@ export const booleanFields = ['ok'];
 
 export const fields = [...stringFields, ...arrayFields, ...objectFields, ...booleanFields];
 
-export const ts = () => String(Date.now() / 1000);
+export const ts = () => String(μs() / 1e6);
 
 export function verifyTypes(tiip) {
   for (const k of stringFields) {

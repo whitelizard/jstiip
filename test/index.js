@@ -218,10 +218,12 @@ test('get/set: ts', t => {
   t.ok(msg.pv === 'tiip.2.0');
   t.ok(msg.ts);
   t.ok(typeof msg.ts === 'string');
-  const nowSec = Date.now() / 1000;
+  const nowSec = Date.now() / 1e3;
+  // console.log('TIMESTAMP msg:', msg.ts);
+  // console.log('TIMESTAMP ref:', nowSec);
   msg.tsUpdate();
   t.ok(typeof msg.ts === 'string');
-  t.ok(Number(msg.ts) - nowSec < 0.01);
+  t.ok(Math.abs(Number(msg.ts) - nowSec) < 0.01);
   msg.ctUpdate();
   t.ok(msg.ct);
   t.end();
