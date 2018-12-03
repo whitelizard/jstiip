@@ -40,10 +40,8 @@
   "dependencies": {
     "lodash.hasin": "^4.5.2",
     "lodash.isboolean": "^3.0.3",
-    "lodash.isnumber": "^3.0.3",
     "lodash.isobject": "^3.0.2",
     "lodash.isstring": "^4.0.1",
-    "lodash.isundefined": "^3.0.1",
-    "microseconds": "^0.1.0"
+    "lodash.isundefined": "^3.0.1"
   }
 }
