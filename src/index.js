@@ -16,19 +16,37 @@ const μs =
     }
     : () => Date.now() * 1e3;
 
-export const version = '2.0';
+export const version = '3.0';
 export const pv = `tiip.${version}`;
-export const stringFields = ['pv', 'ts', 'ct', 'ten', 'sid', 'mid', 'type', 'ch', 'sig'];
+export const timestampFields = ['ts', 'ct'];
+export const stringFields = ['pv', 'ten', 'sid', 'mid', 'type', 'ch', 'sig'];
 export const arrayFields = ['src', 'targ', 'pl'];
 export const objectFields = ['arg'];
 export const booleanFields = ['ok'];
 // const mandatoryFields = ['pv', 'ts'];
 
-export const fields = [...stringFields, ...arrayFields, ...objectFields, ...booleanFields];
+export const fields = [
+  ...timestampFields,
+  ...stringFields,
+  ...arrayFields,
+  ...objectFields,
+  ...booleanFields,
+];
 
-export const ts = () => String(μs() / 1e6);
+export const ts = () => {
+  const μsTime = String(μs()).split('.')[0];
+  return new Date(μsTime / 1000).toISOString().replace('Z', `${String(μsTime).substr(-3)}Z`);
+};
+
+const isISO6801Timestamp = tsString =>
+  /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/.test(tsString);
 
 export function verifyTypes(tiip) {
+  for (const k of timestampFields) {
+    if (!isUndefined(tiip[k]) && !isISO6801Timestamp(tiip[k])) {
+      throw new TypeError(`'${k}' should be a correct ISO 6801 date string (${tiip[k]})`);
+    }
+  }
   for (const k of stringFields) {
     if (!isUndefined(tiip[k]) && !isString(tiip[k])) {
       throw new TypeError(`'${k}' should be a String`);
@@ -52,12 +70,10 @@ export function verifyTypes(tiip) {
 }
 
 export function verifyVersion(tiip) {
-  if (tiip.pv !== 'tiip.2.0') throw new Error('Wrong protocol version');
+  if (tiip.pv !== pv) throw new Error('Wrong protocol version');
 }
 
 export function verifyMandatory(tiip) {
-  // if (!mandatoryFields.every(k => hasIn(tiip, k)))
-  //   throw new TypeError('Mandatory field missing');
   if (!hasIn(tiip, 'pv') || !hasIn(tiip, 'ts')) throw new TypeError('Mandatory field missing');
 }
 
@@ -144,10 +160,16 @@ export default class Tiip {
   }
   set ts(v) {
     if (!isString(v)) throw new TypeError("'type' should be a String");
+    if (!isISO6801Timestamp(v)) {
+      throw new TypeError("'ts' should be a correct ISO 6801 date string");
+    }
     this._$ts = v;
   }
   set ct(v) {
     if (!isString(v)) throw new TypeError("'ct' should be a String");
+    if (!isISO6801Timestamp(v)) {
+      throw new TypeError("'ct' should be a correct ISO 6801 date string");
+    }
     this._$ct = v;
   }
   set type(v) {

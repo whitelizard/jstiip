@@ -1,12 +1,10 @@
-// import chai from 'chai';
 import test from 'tape';
-// import isString from 'lodash.isstring';
 import Tiip, { fields, stringFields, arrayFields, objectFields, booleanFields, pv } from '../src';
 
 test('Construct from Json string', t => {
   const fromJson = JSON.stringify({
-    ts: '123',
-    ct: '123',
+    ts: '2019-04-08T19:32:32.123456Z',
+    ct: '2019-04-08T19:32:32.123456Z',
     type: 'req',
     mid: '0',
     sid: 'X',
@@ -20,9 +18,9 @@ test('Construct from Json string', t => {
     pl: [1.3, 4],
   });
   let msg = new Tiip(fromJson);
-  t.ok(msg.pv === 'tiip.2.0');
-  t.ok(msg.ts === '123');
-  t.ok(msg.ct === '123');
+  t.ok(msg.pv === pv);
+  t.ok(msg.ts === '2019-04-08T19:32:32.123456Z');
+  t.ok(msg.ct === '2019-04-08T19:32:32.123456Z');
   t.ok(msg.type === 'req');
   t.ok(msg.mid === '0');
   t.ok(msg.sid === 'X');
@@ -37,9 +35,9 @@ test('Construct from Json string', t => {
   t.ok(msg.pl[1] === 4);
   msg = new Tiip();
   msg.fromJson(fromJson);
-  t.ok(msg.pv === 'tiip.2.0');
-  t.ok(msg.ts === '123');
-  t.ok(msg.ct === '123');
+  t.ok(msg.pv === pv);
+  t.ok(msg.ts === '2019-04-08T19:32:32.123456Z');
+  t.ok(msg.ct === '2019-04-08T19:32:32.123456Z');
   t.ok(msg.type === 'req');
   t.ok(msg.mid === '0');
   t.ok(msg.sid === 'X');
@@ -69,8 +67,8 @@ test('Construct from Json string with bad keys', t => {
 
 test('Construct from JS object', t => {
   const fromJS = {
-    ts: '123',
-    ct: '123',
+    ts: '2019-04-08T19:32:32.123456Z',
+    ct: '2019-04-08T19:32:32.123456Z',
     type: 'req',
     mid: '0',
     sid: 'X',
@@ -84,9 +82,9 @@ test('Construct from JS object', t => {
     pl: [1.3, 4],
   };
   let msg = new Tiip(fromJS);
-  t.ok(msg.pv === 'tiip.2.0');
-  t.ok(msg.ts === '123');
-  t.ok(msg.ct === '123');
+  t.ok(msg.pv === pv);
+  t.ok(msg.ts === '2019-04-08T19:32:32.123456Z');
+  t.ok(msg.ct === '2019-04-08T19:32:32.123456Z');
   t.ok(msg.type === 'req');
   t.ok(msg.mid === '0');
   t.ok(msg.sid === 'X');
@@ -101,9 +99,9 @@ test('Construct from JS object', t => {
   t.ok(msg.pl[1] === 4);
   msg = new Tiip();
   msg.fromJS(fromJS);
-  t.ok(msg.pv === 'tiip.2.0');
-  t.ok(msg.ts === '123');
-  t.ok(msg.ct === '123');
+  t.ok(msg.pv === pv);
+  t.ok(msg.ts === '2019-04-08T19:32:32.123456Z');
+  t.ok(msg.ct === '2019-04-08T19:32:32.123456Z');
   t.ok(msg.type === 'req');
   t.ok(msg.mid === '0');
   t.ok(msg.sid === 'X');
@@ -134,7 +132,7 @@ test('Construct from JS object with bad keys', t => {
 test('Construct from Tiip, with bad keys/values', t => {
   let from = {
     pv: 'tiip.0.0', // wrong version
-    ts: '123',
+    ts: '2019-04-08T19:32:32.123456Z',
   };
   t.throws(() => new Tiip(from, true));
   let msg = new Tiip();
@@ -148,7 +146,7 @@ test('Construct from Tiip, with bad keys/values', t => {
   t.throws(() => msg.fromJS(from, true));
   t.throws(() => msg.fromJSon(JSON.stringify(from), true));
   from = {
-    ts: '123', // no pv
+    ts: '2019-04-08T19:32:32.123456Z', // no pv
   };
   t.throws(() => new Tiip(from, true));
   msg = new Tiip();
@@ -187,8 +185,8 @@ fields.forEach(k => {
 
 test('toJson', t => {
   let fromJS = {
-    ts: '123',
-    ct: '123',
+    ts: '2019-04-08T19:32:32.123456Z',
+    ct: '2019-04-08T19:32:32.123456Z',
     type: 'req',
     mid: '0',
     sid: 'X',
@@ -203,7 +201,7 @@ test('toJson', t => {
   };
   const msg = new Tiip(fromJS);
   // console.log(msg.toJson());
-  fromJS = { pv: 'tiip.2.0', ...fromJS };
+  fromJS = { pv, ...fromJS };
   const ref = {};
   for (const k of fields) {
     ref[k] = fromJS[k];
@@ -213,29 +211,36 @@ test('toJson', t => {
   t.end();
 });
 
-test('get/set: ts', t => {
+test('get/set: ts & ct', t => {
   const msg = new Tiip();
-  t.ok(msg.pv === 'tiip.2.0');
+  t.ok(msg.pv === pv);
   t.ok(msg.ts);
   t.ok(typeof msg.ts === 'string');
-  const nowSec = Date.now() / 1e3;
-  // console.log('TIMESTAMP msg:', msg.ts);
-  // console.log('TIMESTAMP ref:', nowSec);
   msg.tsUpdate();
+  t.ok(Math.abs(new Date(msg.ts) - Date.now()) < 10); // diff < 10ms
   t.ok(typeof msg.ts === 'string');
-  t.ok(Math.abs(Number(msg.ts) - nowSec) < 0.01);
+  msg.ts = new Date().toISOString();
+  t.throws(() => {
+    msg.ts = 'Incorrect ISO 6801 date';
+  });
   msg.ctUpdate();
   t.ok(msg.ct);
+  msg.ct = new Date().toISOString();
+  t.throws(() => {
+    msg.ct = 'Incorrect ISO 6801 date';
+  });
   t.end();
 });
 
 stringFields.forEach(k => {
-  if (k === 'pv') return;
+  if (['pv'].includes(k)) return;
   test(`get/set: ${k}`, t => {
     const msg = new Tiip();
     msg[k] = '123';
     t.ok(msg[k] === '123');
-    t.throws(() => (msg[k] = 3)); // eslint-disable-line
+    t.throws(() => {
+      msg[k] = 3;
+    });
     t.end();
   });
 });
@@ -287,7 +292,7 @@ test('get/set bad key', t => {
   msg.bad = 1;
   t.ok(msg.bad === 1);
   const obj = msg.toJS();
-  t.ok(obj.pv === 'tiip.2.0');
+  t.ok(obj.pv === pv);
   t.ok(obj.ts);
   t.ok(obj.bad === undefined);
   t.end();
