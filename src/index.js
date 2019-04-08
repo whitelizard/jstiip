@@ -5,16 +5,16 @@ import isObject from 'lodash.isobject';
 import isUndefined from 'lodash.isundefined';
 import hasIn from 'lodash.hasin';
 
-const μsProcessStart = Date.now() * 1e3;
+const nsProcessStart = Date.now() * 1e6;
 const hrTimeProcessStart = global.process && process.hrtime && process.hrtime();
-const μs =
+const ns =
   global.process && process.hrtime
     ? () => {
       // const hr = process.hrtime();
       const hr = process.hrtime(hrTimeProcessStart);
-      return μsProcessStart + (hr[0] * 1e9 + hr[1]) / 1e3;
+      return nsProcessStart + (hr[0] * 1e9 + hr[1]);
     }
-    : () => Date.now() * 1e3;
+    : () => Date.now() * 1e6;
 
 export const version = '3.0';
 export const pv = `tiip.${version}`;
@@ -34,8 +34,12 @@ export const fields = [
 ];
 
 export const ts = () => {
-  const μsTime = String(μs()).split('.')[0];
-  return new Date(μsTime / 1000).toISOString().replace('Z', `${String(μsTime).substr(-3)}Z`);
+  const nsTime = ns();
+  const extraDigits = String(nsTime)
+    .substr(-6)
+    .replace(/0+$/, ''); // remove trailing zeros
+  // Note: Since toISOString() is fixed, returning trailing zeros, the extra digits can be appended.
+  return new Date(nsTime / 1e6).toISOString().replace('Z', `${extraDigits}Z`);
 };
 
 const isISO6801Timestamp = tsString =>
