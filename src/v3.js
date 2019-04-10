@@ -18,8 +18,8 @@ const ns =
 
 export const version = '3.0';
 export const pv = `tiip.${version}`;
-export const timestampFields = ['ts', 'ct'];
-export const stringFields = ['pv', 'ten', 'sid', 'mid', 'type', 'ch', 'sig'];
+export const timestampFields = ['ts'];
+export const stringFields = ['lat', 'pv', 'ten', 'sid', 'mid', 'type', 'ch', 'sig'];
 export const arrayFields = ['src', 'targ', 'pl'];
 export const objectFields = ['arg'];
 export const booleanFields = ['ok'];
@@ -123,8 +123,8 @@ export default class Tiip {
   get ts() {
     return this._$ts;
   }
-  get ct() {
-    return this._$ct;
+  get lat() {
+    return this._$lat;
   }
   get type() {
     return this._$type;
@@ -169,12 +169,9 @@ export default class Tiip {
     }
     this._$ts = v;
   }
-  set ct(v) {
-    if (!isString(v)) throw new TypeError("'ct' should be a String");
-    if (!isISO6801Timestamp(v)) {
-      throw new TypeError("'ct' should be a correct ISO 6801 date string");
-    }
-    this._$ct = v;
+  set lat(v) {
+    if (!isString(v)) throw new TypeError("'lat' should be a String");
+    this._$lat = v;
   }
   set type(v) {
     if (!isString(v)) throw new TypeError("'type' should be a String");
@@ -225,8 +222,8 @@ export default class Tiip {
   tsUpdate() {
     this._$ts = ts();
   }
-  ctUpdate() {
-    this._$ct = ts();
+  latUpdate() {
+    this._$lat = String((Date.now() - new Date(this._$ts)) / 1000);
   }
   toJS() {
     const obj = {};

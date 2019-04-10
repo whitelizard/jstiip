@@ -8,11 +8,11 @@ import Tiip, {
   pv,
 } from '../src/v3';
 
-export const runTests = () => {
+export const runTests = async () => {
   test('Construct from Json string', t => {
     const fromJson = JSON.stringify({
       ts: '2019-04-08T19:32:32.123456Z',
-      ct: '2019-04-08T19:32:32.123456Z',
+      lat: '123.456',
       type: 'req',
       mid: '0',
       sid: 'X',
@@ -28,7 +28,7 @@ export const runTests = () => {
     let msg = new Tiip(fromJson);
     t.ok(msg.pv === pv);
     t.ok(msg.ts === '2019-04-08T19:32:32.123456Z');
-    t.ok(msg.ct === '2019-04-08T19:32:32.123456Z');
+    t.ok(msg.lat === '123.456');
     t.ok(msg.type === 'req');
     t.ok(msg.mid === '0');
     t.ok(msg.sid === 'X');
@@ -45,7 +45,7 @@ export const runTests = () => {
     msg.fromJson(fromJson);
     t.ok(msg.pv === pv);
     t.ok(msg.ts === '2019-04-08T19:32:32.123456Z');
-    t.ok(msg.ct === '2019-04-08T19:32:32.123456Z');
+    t.ok(msg.lat === '123.456');
     t.ok(msg.type === 'req');
     t.ok(msg.mid === '0');
     t.ok(msg.sid === 'X');
@@ -76,7 +76,7 @@ export const runTests = () => {
   test('Construct from JS object', t => {
     const fromJS = {
       ts: '2019-04-08T19:32:32.123456Z',
-      ct: '2019-04-08T19:32:32.123456Z',
+      lat: '123.456',
       type: 'req',
       mid: '0',
       sid: 'X',
@@ -92,7 +92,7 @@ export const runTests = () => {
     let msg = new Tiip(fromJS);
     t.ok(msg.pv === pv);
     t.ok(msg.ts === '2019-04-08T19:32:32.123456Z');
-    t.ok(msg.ct === '2019-04-08T19:32:32.123456Z');
+    t.ok(msg.lat === '123.456');
     t.ok(msg.type === 'req');
     t.ok(msg.mid === '0');
     t.ok(msg.sid === 'X');
@@ -109,7 +109,7 @@ export const runTests = () => {
     msg.fromJS(fromJS);
     t.ok(msg.pv === pv);
     t.ok(msg.ts === '2019-04-08T19:32:32.123456Z');
-    t.ok(msg.ct === '2019-04-08T19:32:32.123456Z');
+    t.ok(msg.lat === '123.456');
     t.ok(msg.type === 'req');
     t.ok(msg.mid === '0');
     t.ok(msg.sid === 'X');
@@ -194,7 +194,7 @@ export const runTests = () => {
   test('toJson', t => {
     let fromJS = {
       ts: '2019-04-08T19:32:32.123456Z',
-      ct: '2019-04-08T19:32:32.123456Z',
+      lat: '123.456',
       type: 'req',
       mid: '0',
       sid: 'X',
@@ -219,7 +219,7 @@ export const runTests = () => {
     t.end();
   });
 
-  test('get/set: ts & ct', t => {
+  test('get/set: ts & lat', t => {
     const msg = new Tiip();
     t.ok(msg.pv === pv);
     t.ok(msg.ts);
@@ -231,11 +231,11 @@ export const runTests = () => {
     t.throws(() => {
       msg.ts = 'Incorrect ISO 6801 date';
     });
-    msg.ctUpdate();
-    t.ok(msg.ct);
-    msg.ct = new Date().toISOString();
+    msg.latUpdate();
+    t.ok(msg.lat);
+    msg.lat = '123.321';
     t.throws(() => {
-      msg.ct = 'Incorrect ISO 6801 date';
+      msg.lat = 123;
     });
     t.end();
   });
