@@ -1,6 +1,6 @@
 {
   "name": "jstiip",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Implementation of protocol TIIP",
   "main": "index.js",
   "scripts": {
