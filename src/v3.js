@@ -82,7 +82,9 @@ export function verifyMandatory(tiip) {
 }
 
 export function verifyValidKeys(tiip) {
-  if (!Object.keys(tiip).every(k => fields.includes(k))) throw new Error('Bad key');
+  Object.keys(tiip).forEach(k => {
+    if (!fields.includes(k)) throw new Error(`Bad key: "${k}"`);
+  });
 }
 
 export function verify(tiip) {
