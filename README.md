@@ -17,13 +17,13 @@ msg.arg = { users: ['me'] };
 ws.send(msg.toJson());
 ```
 
-* [`Tiip`](#tiip)
-* [`fromJson`](#fromjson)
-* [`fromJS`](#fromjs)
-* [`tsUpdate`](#tsupdate)
-* [`ctUpdate`](#ctupdate)
-* [`toJS`](#tojs)
-* [`toJson`](#tojson)
+- [`Tiip`](#tiip)
+- [`fromJson`](#fromjson)
+- [`fromJS`](#fromjs)
+- [`tsUpdate`](#tsupdate)
+- [`latUpdate`](#latUpdate)
+- [`toJS`](#tojs)
+- [`toJson`](#tojson)
 
 ## `Tiip`
 
@@ -56,9 +56,9 @@ Initiate the message from a JS object (if you need to do it after you create the
 
 Set the `ts` (timestamp) field to current time (right now).
 
-## `ctUpdate`
+## `latUpdate`
 
-Set the `ct` (client time) field to current time (right now).
+Set the `lat` (latency) field to the difference between now and ts.
 
 ## `toJS`
 
@@ -70,20 +70,20 @@ Returns the message as a Json string.
 
 ## Getters / Setters
 
-* `pv`: get
-* `ts`: get/set (see also `tsUpdate`)
-* `ct`: get/set (see also `ctUpdate`)
-* `type`: get/set
-* `mid`: get/set
-* `sid`: get/set
-* `ten`: get/set
-* `targ`: get/set
-* `src`: get/set
-* `ok`: get/set
-* `ch`: get/set
-* `sig`: get/set
-* `arg`: get/set
-* `pl`: get/set
+- `pv`: get
+- `ts`: get/set (see also `tsUpdate`)
+- `lat`: get/set (see also `latUpdate`)
+- `type`: get/set
+- `mid`: get/set
+- `sid`: get/set
+- `ten`: get/set
+- `targ`: get/set
+- `src`: get/set
+- `ok`: get/set
+- `ch`: get/set
+- `sig`: get/set
+- `arg`: get/set
+- `pl`: get/set
 
 ```js
 import Tiip from 'jstiip';
