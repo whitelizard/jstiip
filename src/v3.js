@@ -10,10 +10,10 @@ const hrTimeProcessStart = global.process && process.hrtime && process.hrtime();
 const ns =
   global.process && process.hrtime
     ? () => {
-      // const hr = process.hrtime();
-      const hr = process.hrtime(hrTimeProcessStart);
-      return nsProcessStart + (hr[0] * 1e9 + hr[1]);
-    }
+        // const hr = process.hrtime();
+        const hr = process.hrtime(hrTimeProcessStart);
+        return nsProcessStart + (hr[0] * 1e9 + hr[1]);
+      }
     : () => Date.now() * 1e6;
 
 export const version = '3.0';
@@ -104,66 +104,85 @@ export default class Tiip {
       this.fromJS({});
     }
   }
+
   fromJson(str, loadingTiip) {
     this.fromJS(JSON.parse(str), loadingTiip);
   }
+
   fromJS(obj, loadingTiip) {
+    let newObj = obj;
     if (!loadingTiip) {
-      obj.pv = pv; // eslint-disable-line
-      if (isUndefined(obj.ts)) obj.ts = ts(); // eslint-disable-line
+      newObj = { ...obj, pv };
+      if (isUndefined(obj.ts)) newObj.ts = ts();
     }
-    verify(obj);
+    verify(newObj);
     for (const k of fields) {
-      if (!isUndefined(obj[k])) {
-        this[`_$${k}`] = obj[k];
+      if (!isUndefined(newObj[k])) {
+        this[`_$${k}`] = newObj[k];
       }
     }
   }
+
   get pv() {
     return this._$pv;
   }
+
   get ts() {
     return this._$ts;
   }
+
   get lat() {
     return this._$lat;
   }
+
   get type() {
     return this._$type;
   }
+
   get sid() {
     return this._$sid;
   }
+
   get mid() {
     return this._$mid;
   }
+
   get ten() {
     return this._$ten;
   }
+
   get targ() {
     return this._$targ;
   }
+
   get src() {
     return this._$src;
   }
+
   get ch() {
     return this._$ch;
   }
+
   get ok() {
     return this._$ok;
   }
+
   get sig() {
     return this._$sig;
   }
+
   get arg() {
     return this._$arg;
   }
+
   get pl() {
     return this._$pl;
   }
+
   set pv(v) {
     throw new TypeError("'pv' is not writable");
   }
+
   set ts(v) {
     if (!isString(v)) throw new TypeError("'type' should be a String");
     if (!isISO6801Timestamp(v)) {
@@ -171,62 +190,77 @@ export default class Tiip {
     }
     this._$ts = v;
   }
+
   set lat(v) {
     if (!isString(v)) throw new TypeError("'lat' should be a String");
     this._$lat = v;
   }
+
   set type(v) {
     if (!isString(v)) throw new TypeError("'type' should be a String");
     this._$type = v;
   }
+
   set sid(v) {
     if (!isString(v)) throw new TypeError("'sid' should be a String");
     this._$sid = v;
   }
+
   set mid(v) {
     if (!isString(v)) throw new TypeError("'mid' should be a String");
     this._$mid = v;
   }
+
   set ten(v) {
     if (!isString(v)) throw new TypeError("'ten' should be a String");
     this._$ten = v;
   }
+
   set targ(v) {
     if (!Array.isArray(v)) throw new TypeError("'targ' should be an Array");
     if (!v.every(isString)) throw new TypeError("'targ' should contain strings");
     this._$targ = v;
   }
+
   set src(v) {
     if (!Array.isArray(v)) throw new TypeError("'src' should be an Array");
     if (!v.every(isString)) throw new TypeError("'src' should contain strings");
     this._$src = v;
   }
+
   set ch(v) {
     if (!isString(v)) throw new TypeError("'ch' should be a String");
     this._$ch = v;
   }
+
   set ok(v) {
     if (!isBoolean(v)) throw new TypeError("'ok' should be a boolean");
     this._$ok = v;
   }
+
   set sig(v) {
     if (!isString(v)) throw new TypeError("'sig' should be a String");
     this._$sig = v;
   }
+
   set arg(v) {
     if (!isObject(v)) throw new TypeError("'arg' should be an Object");
     this._$arg = v;
   }
+
   set pl(v) {
     if (!Array.isArray(v)) throw new TypeError("'pl' should be an Array");
     this._$pl = v;
   }
+
   tsUpdate() {
     this._$ts = ts();
   }
+
   latUpdate() {
     this._$lat = String((Date.now() - new Date(this._$ts)) / 1000);
   }
+
   toJS() {
     const obj = {};
     for (const k of fields) {
@@ -236,6 +270,7 @@ export default class Tiip {
     }
     return obj;
   }
+
   toJson() {
     return JSON.stringify(this.toJS());
   }
