@@ -6,9 +6,9 @@ import isUndefined from 'lodash.isundefined';
 import hasIn from 'lodash.hasin';
 
 const nsProcessStart = Date.now() * 1e6;
-const hrTimeProcessStart = global.process && process.hrtime && process.hrtime();
-const ns =
-  global.process && process.hrtime
+const hrTimeProcessStart = globalThis.process && process.hrtime && process.hrtime();
+export const ns =
+  globalThis.process && process.hrtime
     ? () => {
         // const hr = process.hrtime();
         const hr = process.hrtime(hrTimeProcessStart);
@@ -46,16 +46,16 @@ const isISO6801Timestamp = tsString =>
   /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/.test(tsString);
 
 export function verifyTypes(tiip) {
-  for (const k of timestampFields) {
+  timestampFields.forEach(k => {
     if (!isUndefined(tiip[k]) && !isISO6801Timestamp(tiip[k])) {
       throw new TypeError(`'${k}' should be a correct ISO 6801 date string (${tiip[k]})`);
     }
-  }
-  for (const k of stringFields) {
+  });
+  stringFields.forEach(k => {
     if (!isUndefined(tiip[k]) && !isString(tiip[k])) {
       throw new TypeError(`'${k}' should be a String`);
     }
-  }
+  });
   if (!isUndefined(tiip.src)) {
     if (!Array.isArray(tiip.src)) throw new TypeError("'src' should be an Array");
     if (!tiip.src.every(isString)) throw new TypeError("'src' should contain strings");
@@ -110,17 +110,14 @@ export default class Tiip {
   }
 
   fromJS(obj, loadingTiip) {
-    let newObj = obj;
     if (!loadingTiip) {
-      newObj = { ...obj, pv };
-      if (isUndefined(obj.ts)) newObj.ts = ts();
+      obj.pv = pv; // eslint-disable-line
+      if (isUndefined(obj.ts)) obj.ts = ts(); // eslint-disable-line
     }
-    verify(newObj);
-    for (const k of fields) {
-      if (!isUndefined(newObj[k])) {
-        this[`_$${k}`] = newObj[k];
-      }
-    }
+    verify(obj);
+    fields.forEach(k => {
+      if (!isUndefined(obj[k])) this[`_$${k}`] = obj[k];
+    });
   }
 
   get pv() {
@@ -263,11 +260,11 @@ export default class Tiip {
 
   toJS() {
     const obj = {};
-    for (const k of fields) {
+    fields.forEach(k => {
       if (!isUndefined(this[`_$${k}`])) {
         obj[k] = this[`_$${k}`];
       }
-    }
+    });
     return obj;
   }
 

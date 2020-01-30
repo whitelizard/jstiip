@@ -7,14 +7,13 @@ import hasIn from 'lodash.hasin';
 
 const μsProcessStart = Date.now() * 1e3;
 const hrTimeProcessStart = global.process && process.hrtime && process.hrtime();
-const μs =
-  global.process && process.hrtime
-    ? () => {
-      // const hr = process.hrtime();
-      const hr = process.hrtime(hrTimeProcessStart);
-      return μsProcessStart + (hr[0] * 1e9 + hr[1]) / 1e3;
-    }
-    : () => Date.now() * 1e3;
+const μs = global.process && process.hrtime
+  ? () => {
+    // const hr = process.hrtime();
+    const hr = process.hrtime(hrTimeProcessStart);
+    return μsProcessStart + (hr[0] * 1e9 + hr[1]) / 1e3;
+  }
+  : () => Date.now() * 1e3;
 
 export const version = '2.0';
 export const pv = `tiip.${version}`;
@@ -82,9 +81,11 @@ export default class Tiip {
       this.fromJS({});
     }
   }
+
   fromJson(str, loadingTiip) {
     this.fromJS(JSON.parse(str), loadingTiip);
   }
+
   fromJS(obj, loadingTiip) {
     if (!loadingTiip) {
       obj.pv = pv; // eslint-disable-line
@@ -97,111 +98,142 @@ export default class Tiip {
       }
     }
   }
+
   get pv() {
     return this._$pv;
   }
+
   get ts() {
     return this._$ts;
   }
+
   get ct() {
     return this._$ct;
   }
+
   get type() {
     return this._$type;
   }
+
   get sid() {
     return this._$sid;
   }
+
   get mid() {
     return this._$mid;
   }
+
   get ten() {
     return this._$ten;
   }
+
   get targ() {
     return this._$targ;
   }
+
   get src() {
     return this._$src;
   }
+
   get ch() {
     return this._$ch;
   }
+
   get ok() {
     return this._$ok;
   }
+
   get sig() {
     return this._$sig;
   }
+
   get arg() {
     return this._$arg;
   }
+
   get pl() {
     return this._$pl;
   }
+
   set pv(v) {
     throw new TypeError("'pv' is not writable");
   }
+
   set ts(v) {
     if (!isString(v)) throw new TypeError("'type' should be a String");
     this._$ts = v;
   }
+
   set ct(v) {
     if (!isString(v)) throw new TypeError("'ct' should be a String");
     this._$ct = v;
   }
+
   set type(v) {
     if (!isString(v)) throw new TypeError("'type' should be a String");
     this._$type = v;
   }
+
   set sid(v) {
     if (!isString(v)) throw new TypeError("'sid' should be a String");
     this._$sid = v;
   }
+
   set mid(v) {
     if (!isString(v)) throw new TypeError("'mid' should be a String");
     this._$mid = v;
   }
+
   set ten(v) {
     if (!isString(v)) throw new TypeError("'ten' should be a String");
     this._$ten = v;
   }
+
   set targ(v) {
     if (!Array.isArray(v)) throw new TypeError("'targ' should be an Array");
     if (!v.every(isString)) throw new TypeError("'targ' should contain strings");
     this._$targ = v;
   }
+
   set src(v) {
     if (!Array.isArray(v)) throw new TypeError("'src' should be an Array");
     if (!v.every(isString)) throw new TypeError("'src' should contain strings");
     this._$src = v;
   }
+
   set ch(v) {
     if (!isString(v)) throw new TypeError("'ch' should be a String");
     this._$ch = v;
   }
+
   set ok(v) {
     if (!isBoolean(v)) throw new TypeError("'ok' should be a boolean");
     this._$ok = v;
   }
+
   set sig(v) {
     if (!isString(v)) throw new TypeError("'sig' should be a String");
     this._$sig = v;
   }
+
   set arg(v) {
     if (!isObject(v)) throw new TypeError("'arg' should be an Object");
     this._$arg = v;
   }
+
   set pl(v) {
     if (!Array.isArray(v)) throw new TypeError("'pl' should be an Array");
     this._$pl = v;
   }
+
   tsUpdate() {
     this._$ts = ts();
   }
+
   ctUpdate() {
     this._$ct = ts();
   }
+
   toJS() {
     const obj = {};
     for (const k of fields) {
@@ -211,6 +243,7 @@ export default class Tiip {
     }
     return obj;
   }
+
   toJson() {
     return JSON.stringify(this.toJS());
   }

@@ -3,3 +3,4 @@
 /index.js
 /v*.js
 /conversion.js
+.nyc_output

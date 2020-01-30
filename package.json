@@ -4,7 +4,7 @@
   "description": "Implementation of protocol TIIP",
   "main": "index.js",
   "scripts": {
-    "test": "npm run babel-node ./test/index.js",
+    "test": "tap test/index.js",
     "babel-node": "./node_modules/.bin/babel-node",
     "build": "babel src -d ."
   },
@@ -25,21 +25,19 @@
   },
   "homepage": "https://github.com/whitelizard/jstiip#readme",
   "devDependencies": {
-    "@babel/cli": "^7.1.5",
-    "@babel/core": "^7.1.6",
-    "@babel/node": "^7.0.0",
-    "@babel/preset-env": "^7.1.6",
-    "babel-eslint": "^10.0.1",
-    "babel-loader": "^8.0.4",
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-config-prettier": "^4.1.0",
-    "eslint-plugin-import": "^2.17.1",
-    "eslint-plugin-node": "^8.0.1",
-    "eslint-plugin-prettier": "^3.0.1",
-    "prettier": "^1.17.0",
-    "prettier-eslint": "^8.8.2",
-    "tape": "^4.10.1"
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/node": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^1.18.2",
+    "prettier-eslint": "^9.0.1",
+    "tap": "^14.10.6"
   },
   "dependencies": {
     "lodash.hasin": "^4.5.2",
