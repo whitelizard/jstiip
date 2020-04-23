@@ -35,23 +35,21 @@ export const fields = [
 
 export const ts = () => {
   const nsTime = ns();
-  const extraDigits = String(nsTime)
-    .substr(-6)
-    .replace(/0+$/, ''); // remove trailing zeros
+  const extraDigits = String(nsTime).substr(-6).replace(/0+$/, ''); // remove trailing zeros
   // Note: Since toISOString() is fixed, returning trailing zeros, the extra digits can be appended.
   return new Date(nsTime / 1e6).toISOString().replace('Z', `${extraDigits}Z`);
 };
 
-const isISO6801Timestamp = tsString =>
+const isISO6801Timestamp = (tsString) =>
   /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/.test(tsString);
 
 export function verifyTypes(tiip) {
-  timestampFields.forEach(k => {
+  timestampFields.forEach((k) => {
     if (!isUndefined(tiip[k]) && !isISO6801Timestamp(tiip[k])) {
       throw new TypeError(`'${k}' should be a correct ISO 6801 date string (${tiip[k]})`);
     }
   });
-  stringFields.forEach(k => {
+  stringFields.forEach((k) => {
     if (!isUndefined(tiip[k]) && !isString(tiip[k])) {
       throw new TypeError(`'${k}' should be a String`);
     }
@@ -82,7 +80,7 @@ export function verifyMandatory(tiip) {
 }
 
 export function verifyValidKeys(tiip) {
-  Object.keys(tiip).forEach(k => {
+  Object.keys(tiip).forEach((k) => {
     if (!fields.includes(k)) throw new Error(`Bad key: "${k}"`);
   });
 }
@@ -115,7 +113,7 @@ export default class Tiip {
       if (isUndefined(obj.ts)) obj.ts = ts(); // eslint-disable-line
     }
     verify(obj);
-    fields.forEach(k => {
+    fields.forEach((k) => {
       if (!isUndefined(obj[k])) this[`_$${k}`] = obj[k];
     });
   }
@@ -260,7 +258,7 @@ export default class Tiip {
 
   toJS() {
     const obj = {};
-    fields.forEach(k => {
+    fields.forEach((k) => {
       if (!isUndefined(this[`_$${k}`])) {
         obj[k] = this[`_$${k}`];
       }

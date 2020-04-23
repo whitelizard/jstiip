@@ -7,13 +7,14 @@ import hasIn from 'lodash.hasin';
 
 const μsProcessStart = Date.now() * 1e3;
 const hrTimeProcessStart = global.process && process.hrtime && process.hrtime();
-const μs = global.process && process.hrtime
-  ? () => {
-    // const hr = process.hrtime();
-    const hr = process.hrtime(hrTimeProcessStart);
-    return μsProcessStart + (hr[0] * 1e9 + hr[1]) / 1e3;
-  }
-  : () => Date.now() * 1e3;
+const μs =
+  global.process && process.hrtime
+    ? () => {
+        // const hr = process.hrtime();
+        const hr = process.hrtime(hrTimeProcessStart);
+        return μsProcessStart + (hr[0] * 1e9 + hr[1]) / 1e3;
+      }
+    : () => Date.now() * 1e3;
 
 export const version = '2.0';
 export const pv = `tiip.${version}`;
@@ -61,7 +62,7 @@ export function verifyMandatory(tiip) {
 }
 
 export function verifyValidKeys(tiip) {
-  if (!Object.keys(tiip).every(k => fields.includes(k))) throw new Error('Bad key');
+  if (!Object.keys(tiip).every((k) => fields.includes(k))) throw new Error('Bad key');
 }
 
 export function verify(tiip) {
